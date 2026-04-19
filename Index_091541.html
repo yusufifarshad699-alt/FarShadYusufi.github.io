@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Farshad Yusufi Clock</title>
+
+<style>
+body{
+margin:0;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:radial-gradient(circle,#111,#000);
+font-family:Tahoma,Arial;
+overflow:hidden;
+color:#fff;
+}
+
+/* 🔽 کوچک شده 50٪ */
+.clock{
+position:relative;
+width:260px;
+height:260px;
+border:3px solid #fff;
+border-radius:50%;
+box-shadow:0 0 20px #00ffff;
+}
+
+.char{
+position:absolute;
+font-size:12px;
+font-weight:bold;
+color:#00ffff;
+transform:translate(-50%,-50%);
+transition:.35s;
+text-shadow:0 0 6px #00ffff;
+}
+
+.hand{
+position:absolute;
+width:3px;
+height:110px;
+background:#ff3030;
+left:128px;
+top:20px;
+transform-origin:bottom center;
+border-radius:10px;
+box-shadow:0 0 10px red;
+z-index:5;
+}
+
+.center{
+position:absolute;
+width:10px;
+height:10px;
+background:#fff;
+border-radius:50%;
+left:125px;
+top:125px;
+z-index:6;
+}
+
+.output{
+position:absolute;
+width:100%;
+top:110px;
+text-align:center;
+font-size:18px;
+font-weight:bold;
+letter-spacing:2px;
+color:#fff;
+text-shadow:0 0 10px #fff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="clock" id="clock">
+<div class="hand" id="hand"></div>
+<div class="center"></div>
+<div class="output" id="output"></div>
+</div>
+
+<script>
+const text = "FARSHAD YUSUFI";
+const chars = text.split("");
+
+const clock = document.getElementById("clock");
+const hand = document.getElementById("hand");
+const output = document.getElementById("output");
+
+let step = 360 / chars.length;
+
+chars.forEach((ch,i)=>{
+let angle = (i*step - 90) * Math.PI/180;
+
+let x = 130 + Math.cos(angle)*110;
+let y = 130 + Math.sin(angle)*110;
+
+let d = document.createElement("div");
+d.className="char";
+d.id="c"+i;
+d.innerText = ch;
+d.style.left = x+"px";
+d.style.top = y+"px";
+clock.appendChild(d);
+});
+
+let sec = 0;
+let built = "";
+
+setInterval(()=>{
+
+sec++;
+if(sec > chars.length){
+sec = 1;
+built = "";
+output.innerText = "";
+}
+
+hand.style.transform = `rotate(${sec*step}deg)`;
+
+let hit = document.getElementById("c"+(sec-1));
+
+if(hit){
+hit.style.transform="translate(-50%,-50%) scale(1.8)";
+hit.style.color="#fff";
+
+setTimeout(()=>{
+hit.style.transform="translate(-50%,-50%) scale(1)";
+hit.style.color="#00ffff";
+},400);
+
+built += chars[sec-1];
+output.innerText = built;
+}
+
+},1000);
+</script>
+
+</body>
+</html>
